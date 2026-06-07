@@ -1,4 +1,8 @@
 # venv_manager.py
+# Platform note: detection and activation instructions are Unix-oriented.
+#   - list: looks for bin/activate (Unix); on Windows venvs use Scripts\activate.bat
+#   - create: calls 'python3'; on Windows you may need 'python' instead
+#   - activation instructions printed are Unix ('source'); Windows uses: <env>\Scripts\activate
 
 import argparse
 import os
@@ -11,33 +15,45 @@ VENV_DIR = 'venv'
 def list_venvs():
     """
     Lists all virtual environments in the current working directory.
-    A directory is considered a virtual environment if it contains a 'bin/activate' file.
+    A directory is considered a virtual environment if it contains a 'bin/activate'
+    file (Unix) or a 'Scripts\\activate.bat' file (Windows).
     """
     print("Listing virtual environments in the current directory:")
     found = False
     # Check all subdirectories in the current directory.
     for item in os.listdir('.'):
         if os.path.isdir(item):
-            # Check for the existence of the activation script.
-            if os.path.exists(os.path.join(item, 'bin', 'activate')):
-                print(f"✅ {item}")
+            # Check for Unix activation script or Windows activation script.
+            unix_activate   = os.path.exists(os.path.join(item, 'bin', 'activate'))
+            windows_activate = os.path.exists(os.path.join(item, 'Scripts', 'activate.bat'))
+            if unix_activate or windows_activate:
+                print(f"  {item}")
                 found = True
     if not found:
         print("No virtual environments found.")
-    print("\nTo activate an environment, use: 'source <env_name>/bin/activate'")
+    if os.name == 'nt':
+        print("\nTo activate an environment (Windows), use: <env_name>\\Scripts\\activate")
+    else:
+        print("\nTo activate an environment (Unix), use: source <env_name>/bin/activate")
 
 def create_venv(name):
     """
     Creates a new virtual environment with the specified name.
+    Uses 'python3' on Unix; falls back to 'python' on Windows.
     """
     print(f"Creating virtual environment '{name}'...")
+    # On Windows 'python3' may not exist; use 'python' as fallback.
+    python_cmd = 'python3' if os.name != 'nt' else 'python'
     try:
-        # Use subprocess to call the 'python3 -m venv' command.
-        subprocess.run(['python3', '-m', 'venv', name], check=True, capture_output=True, text=True)
+        # Use subprocess to call 'python -m venv'.
+        subprocess.run([python_cmd, '-m', 'venv', name], check=True, capture_output=True, text=True)
         print(f"Successfully created virtual environment '{name}'.")
-        print(f"To activate, run: 'source {name}/bin/activate'")
+        if os.name == 'nt':
+            print(f"To activate (Windows), run: {name}\\Scripts\\activate")
+        else:
+            print(f"To activate (Unix), run: source {name}/bin/activate")
     except FileNotFoundError:
-        print("Error: 'python3' command not found. Make sure Python 3 is installed and in your PATH.")
+        print(f"Error: '{python_cmd}' command not found. Make sure Python 3 is installed and in your PATH.")
     except subprocess.CalledProcessError as e:
         print(f"Error creating environment: {e.stderr}")
         print(f"Failed to create '{name}'. Please check for existing directories with the same name.")
