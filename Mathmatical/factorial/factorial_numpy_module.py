@@ -1,4 +1,5 @@
-# this module can not be resolved on my mac
+# Requires: pip install numpy
+# numpy is not part of the standard library; install it before running this file.
 import numpy
 
 n = 5

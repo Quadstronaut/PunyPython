@@ -71,16 +71,16 @@ PunyPython/
 │
 ├── Textual/
 │   ├── hello_world.py
-│   ├── ascii_value_of_char.py
-│   └── remove_nth_char.py
+│   ├── ascii_value_of_char.py     — print ASCII value of every character in user input
+│   └── remove_nth_char.py         — remove the character at index n (0-based) from a string
 │
 ├── Mathmatical/
 │   ├── Armstrong_number_check.py
-│   ├── factorial/                 — 4 approaches
+│   ├── factorial/                 — 4 approaches (one requires numpy: pip install numpy)
 │   ├── maximum_of_2_numbers/      — 6 approaches
 │   └── add_2_numbers/             — 6 approaches
 │
-└── venv_manager.py                — CLI tool for managing Python virtual environments
+└── venv_manager.py                — CLI tool for managing Python virtual environments (Unix-first; Windows-compatible with caveats — see script header)
 ```
 
 ---
