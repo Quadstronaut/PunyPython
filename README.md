@@ -80,7 +80,7 @@ PunyPython/
 │   ├── maximum_of_2_numbers/      — 6 approaches
 │   └── add_2_numbers/             — 6 approaches
 │
-└── venv_manager.py                — CLI tool for managing Python virtual environments (Unix-first; Windows-compatible with caveats — see script header)
+└── venv_manager.py                — CLI tool for managing Python virtual environments (Unix-first; Windows has known failures — see wiki venv-manager page)
 ```
 
 ---
